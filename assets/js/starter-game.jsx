@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
+import Tile from './tile.jsx'
 import _ from 'lodash';
 
 export default function game_init(root) {
@@ -9,39 +11,40 @@ export default function game_init(root) {
 class Starter extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { left: false };
+    this.state = {
+      tiles: []
+    };
   }
 
-  swap(_ev) {
-    let state1 = _.assign({}, this.state, { left: !this.state.left });
-    this.setState(state1);
+
+  groupTiles(tiles) {
+    let out = [];
+    for(let i = 0; i < 4; i++){
+      out.push(<div className="row">{tiles.splice(0, 3)}</div>)
+    }
+    return out
   }
 
-  hax(_ev) {
-    alert("hax!");
+  buildTiles() {
+    const letters = [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' ];
+    const out =  letters.reduce((acc, letter) => {
+      const letterTiles = [<Tile {...{letter}}/>, <Tile {...{letter}}/>];
+      return acc.concat(letterTiles);
+    }, [])
+    return out.sort((a,b) => Math.round(Math.random()))
   }
 
   render() {
-    let button = <div className="column" onMouseMove={this.swap.bind(this)}>
-      <p><button onClick={this.hax.bind(this)}>Click Me</button></p>
+    const tiles = this.groupTiles(this.buildTiles());
+    return <div classname="gameBoard" style={{
+    margin: 'auto', width: '50vw', border: '3px solid black', padding: '10px'}}>
+      {tiles}
     </div>;
-
-    let blank = <div className="column">
-      <p>Nothing here.</p>
-    </div>;
-
-    if (this.state.left) {
-      return <div className="row">
-        {button}
-        {blank}
-      </div>;
-    }
-    else {
-      return <div className="row">
-        {blank}
-        {button}
-      </div>;
-    }
   }
 }
+
+Starter.propTypes = {
+  tiles: PropTypes.array
+}
+
 
