@@ -9,15 +9,17 @@ export default class Tile extends React.Component {
   }
 
   render() {
-    const { letter, clicked } = this.props;
-
-    return <div className="tile" style={{
-      display: 'inline-block',  margin: '2%',
-      width: '10vh', backgroundColor: 'blue'}}></div>
+    const { value, onClick, flipped, id } = this.props;
+    return <React.Fragment>
+      {flipped && <div className="column tile flipped" onClick={() => onClick(id)}><h1>{value}</h1></div>}
+      {!flipped && <div className="column tile not-flipped" onClick={() => onClick(id)}></div>}
+  </React.Fragment>
   }
 }
 
 Tile.propTypes = {
-  letter: PropTypes.string,
-  clicked: PropTypes.bool
+  value: PropTypes.string.isRequired,
+  flipped: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
+  id: PropTypes.number.isRequired
 }

@@ -7,3 +7,25 @@
     text-align: center;
 }
 
+.tile {
+    height: 10vh;
+    width: 10vw;
+    margin: 2% !important;
+}
+
+.flipped {
+    background-color: white;
+}
+
+.not-flipped {
+    background-color: blue;
+}
+
+.game-board {
+    background-color: saddlebrown;
+}
+/*style={{
+//    margin: '2%', height: '10vh', width: '10vw', backgroundColor: 'blue'}}>
+//style={{
+//      margin: '2%', height: '10vh', width: '10vw', backgroundColor: 'white', textAlign: 'center'}}>
+*/
