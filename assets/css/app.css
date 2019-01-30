@@ -17,6 +17,10 @@
     background-color: white;
 }
 
+.found {
+    background-color: gold;
+}
+
 .not-flipped {
     background-color: blue;
 }

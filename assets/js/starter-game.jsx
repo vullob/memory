@@ -70,6 +70,14 @@ class Starter extends React.Component {
       }
       return setTimeout(() => this.setState(updatedState), 1000)
     }
+    const foundTiles = flippedTiles
+      .map((tile) => { tile.found = true; return tile})
+      .reduce((acc, tile) => { debugger; acc[tile.id] = tile; return acc }, {});
+    updatedState.tiles = {
+      ...tiles,
+      ...foundTiles
+    }
+    debugger;
     this.setState(updatedState)
   }
 
@@ -79,6 +87,7 @@ class Starter extends React.Component {
     console.log(letters)
     const tiles = {}
     const newTile = {
+      found: false,
       flipped: false
     }
     for(let i = 0; i < 16; i++) tiles[i] = {...newTile, value: letters[i], id: i}
