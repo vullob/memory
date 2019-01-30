@@ -54,25 +54,17 @@ class Starter extends React.Component {
     }
     const flippedTiles = currentFlipped.map((id) => tiles[id])
     if(tiles[currentFlipped[0]].value !== tiles[currentFlipped[1]].value){
-      updatedState = {
-        ...updatedState,
-        tiles: {
-          ...tiles,
-          [currentFlipped[0]]: {
-            ...flippedTiles[0],
-            flipped: false
-          },
-          [currentFlipped[1]]: {
-            ...flippedTiles[1],
-            flipped: false
-          }
-        }
+      const wrongTiles = flippedTiles
+        .reduce((acc, tile) => {return {...acc, [tile.id]: { ...tile, flipped: false}}}, {});
+      updatedState.tiles = {
+        ...tiles,
+        ...wrongTiles
       }
       return setTimeout(() => this.setState(updatedState), 1000)
     }
     const foundTiles = flippedTiles
       .map((tile) => { tile.found = true; return tile})
-      .reduce((acc, tile) => { debugger; acc[tile.id] = tile; return acc }, {});
+      .reduce((acc, tile) => { acc[tile.id] = tile; return acc }, {});
     updatedState.tiles = {
       ...tiles,
       ...foundTiles
