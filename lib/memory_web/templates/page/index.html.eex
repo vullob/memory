@@ -1,3 +1,6 @@
-<div id="root">
-  React app loading...
+<div class="row">
+  <div clas="column">
+    <h1>Join A Game</h1>
+    <a href="/game/demo">Join a demo</a>
+  </div>
 </div>
