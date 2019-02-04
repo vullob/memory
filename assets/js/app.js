@@ -11,6 +11,7 @@ import css from "../css/app.css";
 //
 import "phoenix_html";
 import $ from "jquery";
+import socket from "./socket"
 
 // Import local files
 //
@@ -21,6 +22,7 @@ import game_init from "./starter-game";
 
 $(() => {
   let root = $('#root')[0];
-  game_init(root);
+  let channel = socket.channel("memory" + window.gameName, {})
+  game_init(root, channel);
 });
 

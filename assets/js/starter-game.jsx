@@ -4,13 +4,14 @@ import PropTypes from 'prop-types';
 import Tile from './tile.jsx'
 import _ from 'lodash'
 
-export default function game_init(root) {
-  ReactDOM.render(<Starter />, root);
+export default function game_init(root, channel) {
+  ReactDOM.render(<Starter channel={channel}/>, root);
 }
 
 class Starter extends React.Component {
   constructor(props) {
     super(props);
+    const { channel } = this.props;
     this.state = {
       tiles: {},
       currentFlipped: [],
@@ -18,6 +19,7 @@ class Starter extends React.Component {
       isChecking: false,
     };
     this.onClick = this.onClick.bind(this)
+    channel.join("memory:demo").receive("ok", (x)=>{console.log(x)})
   }
 
   componentWillMount() {
