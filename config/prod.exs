@@ -13,9 +13,10 @@ config :memory, MemoryWeb.Endpoint,
   server: true,
   root: ".",
   version: Application.spec(:phoenix_distillery, :vsn),
-  http: [:inet6, port: {:system, "PORT"}],
-  url: [host: "memory1.ironbeard.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  http: [port: {:system, "PORT"}],
+  url: [host: "memory2.miniguavabundtcakes.com", port: 80],
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  version: Application.spec(:phoenix_distillery, :vsn)
 
 # Do not print debug messages in production
 config :logger, level: :info
