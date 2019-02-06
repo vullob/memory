@@ -11,7 +11,8 @@ defmodule Memory.Application do
       # Start the endpoint when the application starts
       MemoryWeb.Endpoint,
       # Starts a worker by calling: Memory.Worker.start_link(arg)
-      # {Memory.Worker, arg},
+      # {Memory.Worker, arg}
+      Memory.BackupAgent
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

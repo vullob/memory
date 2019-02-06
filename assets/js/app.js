@@ -22,7 +22,7 @@ import game_init from "./starter-game";
 
 $(() => {
   let root = $('#root')[0];
-  let channel = socket.channel("memory" + window.gameName, {})
+  let channel = socket.channel("memory:" + window.gameName, {})
   game_init(root, channel);
 });
 

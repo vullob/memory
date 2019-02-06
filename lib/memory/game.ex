@@ -1,7 +1,7 @@
 defmodule Memory.Game do
 
   def new do
-    letters = [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' ]
+    letters = [ "A", "B", "C", "D", "E", "F", "G", "H" ]
     tiles = letters
       |> Enum.concat(letters)
       |> Enum.shuffle
@@ -21,16 +21,16 @@ defmodule Memory.Game do
   end
 
 
-  def checkTileRender(tile) do
+  def checkTileRender(tile, acc) do
      cond do
-      tile.flipped == true -> tile |> Map.delete(:found) |> Map.delete(:flipped)
-      true -> %{ id: tile.id }
+      tile.flipped == true -> tile |> Map.delete(:found) |> Map.delete(:flipped); Map.put(acc, tile.id, tile)
+      true -> Map.put(acc, tile.id, %{ id: tile.id })
       end
   end
 
 
   def client_view(game) do
-    tiles = Enum.map(game.tiles, fn {_, tile} -> Memory.Game.checkTileRender(tile) end)
+    tiles = Enum.reduce(game.tiles, %{}, fn {_, tile}, acc -> Memory.Game.checkTileRender(tile, acc) end)
     %{
         tiles: tiles,
         totalFlipped: game.totalFlipped,
@@ -47,16 +47,14 @@ defmodule Memory.Game do
                                       %{ flipped: true }
                                       ))
                         })
-    parent = self()
-    if length(game.currentFlipped) == 2 do
-        newGame = Map.merge(newGame, %{ isChecking: true })
-        # TODO: recieve message from this process
-        spawn(fn -> send(parent, {:checkingDone, checkMove(game)}) end)
+    cond do
+      length(newGame.currentFlipped) >= 2 -> {Map.merge(newGame, %{isChecking: true}), checkPair(newGame)}
+      true -> {newGame, newGame}
     end
-    newGame
-  end
+ end
 
   def wrongMove(game) do
+    IO.puts("this was a bad move")
     updatedTiles = game.currentFlipped
             |> Enum.map(fn x -> Map.merge(Map.get(game.tiles, x, nil),
                                           %{ flipped: false })
@@ -64,11 +62,14 @@ defmodule Memory.Game do
             |> Enum.reduce(%{}, fn x, acc -> Map.put(acc, x.id,x) end)
     updatedTiles = game.tiles
             |> Map.merge(updatedTiles)
-            |> IO.inspect
       Map.put(game, :tiles, updatedTiles)
+            |> Map.put(:currentFlipped, [])
+            |> Map.merge(%{isChecking: false, currentFlipped: []})
+            |> IO.inspect
+
   end
 
-  def checkMove(game) do
+  def checkPair(game) do
     newGame = game
           |> Map.merge(%{isChecking: false, currentFlipped: []})
     tile1 = Map.get(game.tiles, (hd game.currentFlipped)).letter
@@ -82,10 +83,10 @@ defmodule Memory.Game do
 
 
   def checkMove(game, id) do
-    tile = game.tiles.id
+    tile = Map.get(game.tiles, id)
     cond do
-      game.isChecking || tile.flipped -> client_view(game)
-      true -> client_view(flipTile(game, id))
+      game.isChecking || tile.flipped -> {game, game}
+      true -> flipTile(game, id)
     end
   end
 
