@@ -22,8 +22,9 @@ defmodule Memory.Game do
 
 
   def checkTileRender(tile, acc) do
-     cond do
-      tile.flipped == true -> tile |> Map.delete(:found) |> Map.delete(:flipped); Map.put(acc, tile.id, tile)
+    %{:flipped => flipped} = tile
+    cond do
+      flipped === true -> tile |> Map.delete(:flipped); Map.put(acc, tile.id, tile)
       true -> Map.put(acc, tile.id, %{ id: tile.id })
       end
   end
@@ -70,8 +71,16 @@ defmodule Memory.Game do
   end
 
   def checkPair(game) do
+    IO.puts("currentFlipped:")
+    newTiles = game.currentFlipped
+            |> Enum.map(fn x -> Map.get(game.tiles, x, nil) end)
+            |> Enum.map(fn x -> Map.merge(x , %{found: true}) end)
+            |> Enum.reduce(game.tiles, fn x, acc -> Map.put(acc, x.id, x) end)
+            |> IO.inspect
     newGame = game
           |> Map.merge(%{isChecking: false, currentFlipped: []})
+          |> Map.merge(%{tiles: newTiles})
+
     tile1 = Map.get(game.tiles, (hd game.currentFlipped)).letter
     tile2 = Map.get(game.tiles, (hd (tl game.currentFlipped))).letter
     cond do

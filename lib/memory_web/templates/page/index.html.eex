@@ -1,6 +1,11 @@
 <div class="row">
   <div clas="column">
+    <%= form_for @conn, "/game", fn f -> %>
     <h1>Join A Game</h1>
-    <a href="/game/demo">Join a demo</a>
+    <label>
+      Room: <%= text_input f, :name %>
+    </label>
+    <p><%= submit "Join" %></p>
+    <% end %>
   </div>
 </div>
