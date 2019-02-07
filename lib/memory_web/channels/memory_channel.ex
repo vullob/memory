@@ -21,13 +21,11 @@ defmodule MemoryWeb.MemoryChannel do
     name = socket.assigns[:name]
     {game, laterGame} = Game.checkMove(socket.assigns[:game], id)
     BackupAgent.put(name, laterGame)
-    {game, id} |> IO.inspect
     socket = assign(socket, :game, laterGame)
     if (game != laterGame) do
       push(socket, "updateBoard", %{"game" => Game.client_view(game)})
       :timer.sleep(1000)
     end
-    {laterGame, id} |> IO.inspect
     socket = assign(socket, :game, laterGame)
     {:reply, {:ok, %{"game" => Game.client_view(laterGame)}}, socket}
   end

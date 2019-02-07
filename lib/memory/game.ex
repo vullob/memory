@@ -55,7 +55,6 @@ defmodule Memory.Game do
  end
 
   def wrongMove(game) do
-    IO.puts("this was a bad move")
     updatedTiles = game.currentFlipped
             |> Enum.map(fn x -> Map.merge(Map.get(game.tiles, x, nil),
                                           %{ flipped: false })
@@ -66,17 +65,14 @@ defmodule Memory.Game do
       Map.put(game, :tiles, updatedTiles)
             |> Map.put(:currentFlipped, [])
             |> Map.merge(%{isChecking: false, currentFlipped: []})
-            |> IO.inspect
 
   end
 
   def checkPair(game) do
-    IO.puts("currentFlipped:")
     newTiles = game.currentFlipped
             |> Enum.map(fn x -> Map.get(game.tiles, x, nil) end)
             |> Enum.map(fn x -> Map.merge(x , %{found: true}) end)
             |> Enum.reduce(game.tiles, fn x, acc -> Map.put(acc, x.id, x) end)
-            |> IO.inspect
     newGame = game
           |> Map.merge(%{isChecking: false, currentFlipped: []})
           |> Map.merge(%{tiles: newTiles})
