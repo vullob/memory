@@ -1,3 +1,4 @@
+## This code was take from class notes ##
 defmodule Memory.BackupAgent do
   use Agent
 
